@@ -3,7 +3,7 @@ FROM httpd:2.4-alpine
 ENV TZ=${TZ:-UTC}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ENV APP_ROOT=/var/www/app
+ENV APP_ROOT=/var/www
 ENV SERVER_NAME=localhost
 ENV DOCUMENT_ROOT=${APP_ROOT}/public_html
 ENV APACHE_LOG_DIR=${APP_ROOT}/docker/apache/logs
