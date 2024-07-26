@@ -81,6 +81,10 @@ RUN set -eux \
   # Clean up
   && apk del --purge .build_deps \
   && rm -rf /var/cache/apk/*
+  # Enable Apache modules
+  # && a2enmod rewrite \
+  # && a2enmod headers \
+  # && a2enmod ssl
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -91,13 +95,6 @@ COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
 # Copy entrypoint
 COPY ./entrypoint /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-
-# Install Composer
-RUN set -ex \
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); exit(1); }" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');"
 
 # Workdir
 ENV WORKDIR=/var/www/public_html

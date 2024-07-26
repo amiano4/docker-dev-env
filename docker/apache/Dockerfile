@@ -4,7 +4,7 @@ ENV TZ=${TZ:-UTC}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV APP_ROOT=/var/www
-ENV SERVER_NAME=localhost
+ENV SERVER_NAME=projects.dev
 ENV DOCUMENT_ROOT=${APP_ROOT}/public_html
 ENV APACHE_LOG_DIR=${APP_ROOT}/docker/apache/logs
 ENV APACHE_RUN_GROUP=www-data
@@ -20,3 +20,6 @@ RUN chown -R ${APACHE_RUN_USER}:${APACHE_RUN_USER} ${DOCUMENT_ROOT}
 RUN ln -s ${APP_ROOT}/public_html/index.php ${DOCUMENT_ROOT}
 
 COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
+
+COPY ./localhost.conf /usr/local/apache2/conf/extra/localhost.conf
+RUN echo "Include conf/extra/localhost.conf" >> /usr/local/apache2/conf/httpd.conf
